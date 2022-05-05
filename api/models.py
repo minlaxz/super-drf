@@ -10,31 +10,23 @@ class TodoTask(models.Model):
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    state = FSMField(default=STATES[0], choices=STATES, protected=True)
+    state = FSMField(default='Open', choices=STATES, protected=True)
 
     def __str__(self):
         return self.title
 
-    @transition(field=state, source='Open', target='In Progress')
+    @transition(field=state, source=['Open', 'Re Opened'], target='In Progress')
     def trans_start(self):
         pass
     
-    @transition(field=state, source='In Progress', target='Resolved')
+    @transition(field=state, source=['In Progress', 'Re Opened'], target='Resolved')
     def trans_resolve(self):
         pass
     
     @transition(field=state, source='Resolved', target='Re Opened')
     def trans_reopen(self):
         pass
-    
-    @transition(field=state, source='Re Opened', target='Closed')
-    def trans_rclose(self):
-        pass
-    
-    @transition(field=state, source='*', target='Closed')
-    def trans_delete(self):
-        pass
-    
+
     @transition(field=state, source='Resolved', target='Closed')
     def trans_close(self):
         pass

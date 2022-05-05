@@ -47,6 +47,19 @@ django = ">=2.2"
 pytz = "*"
 
 [[package]]
+name = "graphviz"
+version = "0.20"
+description = "Simple Python interface for Graphviz"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+dev = ["tox (>=3)", "flake8", "pep8-naming", "wheel", "twine"]
+docs = ["sphinx (>=4)", "sphinx-autodoc-typehints", "sphinx-rtd-theme"]
+test = ["pytest (>=7)", "pytest-mock (>=3)", "mock (>=4)", "pytest-cov", "coverage"]
+
+[[package]]
 name = "pytz"
 version = "2022.1"
 description = "World timezone definitions, modern and historical"
@@ -73,7 +86,7 @@ python-versions = ">=2"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "0d7a37dcfbb2714375ffb739c7b36af5be8b9500b81cdb7070db4ef641d238e4"
+content-hash = "270e66d998e99fb656e200752b7dfc251144e0cbc6f69a081c2d27ac044b18ce"
 
 [metadata.files]
 asgiref = [
@@ -91,6 +104,10 @@ django-fsm = [
 djangorestframework = [
     {file = "djangorestframework-3.13.1-py3-none-any.whl", hash = "sha256:24c4bf58ed7e85d1fe4ba250ab2da926d263cd57d64b03e8dcef0ac683f8b1aa"},
     {file = "djangorestframework-3.13.1.tar.gz", hash = "sha256:0c33407ce23acc68eca2a6e46424b008c9c02eceb8cf18581921d0092bc1f2ee"},
+]
+graphviz = [
+    {file = "graphviz-0.20-py3-none-any.whl", hash = "sha256:62c5f48bcc534a45b4588c548ff75e419c1f1f3a33d31a91796ae80a7f581e4a"},
+    {file = "graphviz-0.20.zip", hash = "sha256:76bdfb73f42e72564ffe9c7299482f9d72f8e6cb8d54bce7b48ab323755e9ba5"},
 ]
 pytz = [
     {file = "pytz-2022.1-py2.py3-none-any.whl", hash = "sha256:e68985985296d9a66a881eb3193b0906246245294a881e7c8afe623866ac6a5c"},
