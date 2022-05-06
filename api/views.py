@@ -20,6 +20,10 @@ class ApiIndexViewSet(ModelViewSet):
         return queryset
 
     @action(detail=False, methods=['get'])
+    def test(self, request):
+        return Response({'message': 'Hello, World!'})
+
+    @action(detail=False, methods=['get'])
     def get_all_tasks(self, request):
         tasks = TodoTask.objects.all()
         serializer = TodoTaskSerializer(tasks, many=True, context={'request': request})
