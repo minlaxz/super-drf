@@ -41,7 +41,7 @@ class ApiIndexViewSet(ModelViewSet):
     def start_task(self, request, pk):
         task = self.get_object()
         if not can_proceed(task.trans_start):
-            raise exceptions.PermissionDenied('Transition is not allowed')
+            raise exceptions.ValidationError('Transition is not allowed')
         task.trans_start()
         task.save()
         return Response(status=status.HTTP_200_OK)
@@ -50,7 +50,7 @@ class ApiIndexViewSet(ModelViewSet):
     def resolve_task(self, request, pk):
         task = self.get_object()
         if not can_proceed(task.trans_resolve):
-            raise exceptions.PermissionDenied('Transition is not allowed')
+            raise exceptions.ValidationError('Transition is not allowed')
         task.trans_resolve()
         task.save()
         return Response(status=status.HTTP_200_OK)
@@ -59,7 +59,7 @@ class ApiIndexViewSet(ModelViewSet):
     def close_task(self, request, pk):
         task = self.get_object()
         if not can_proceed(task.trans_close):
-            raise exceptions.PermissionDenied('Transition is not allowed')
+            raise exceptions.ValidationError('Transition is not allowed')
         task.trans_close()
         task.save()
         return Response(status=status.HTTP_200_OK)
@@ -68,7 +68,7 @@ class ApiIndexViewSet(ModelViewSet):
     def reopen_task(self, request, pk):
         task = self.get_object()
         if not can_proceed(task.trans_reopen):
-            raise exceptions.PermissionDenied('Transition is not allowed')
+            raise exceptions.ValidationError('Transition is not allowed')
         task.trans_reopen()
         task.save()
         return Response(status=status.HTTP_200_OK)

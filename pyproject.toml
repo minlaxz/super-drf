@@ -12,6 +12,7 @@ Django = "^4.0.4"
 django-fsm = "^2.8.0"
 graphviz = "^0.20"
 django-cors-headers = "^3.11.0"
+psycopg2-binary = "^2.9.3"
 
 [tool.poetry.dev-dependencies]
 
