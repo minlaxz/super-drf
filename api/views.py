@@ -6,6 +6,7 @@ from rest_framework import exceptions, status
 from django_fsm import can_proceed
 from .models import TodoTask
 from .serializers import TodoTaskSerializer
+import socket
 # Create your views here.
 
 class ApiIndexViewSet(ModelViewSet):
@@ -19,9 +20,17 @@ class ApiIndexViewSet(ModelViewSet):
             queryset = queryset.filter(state=state)
         return queryset
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.state == 'Closed':
+            return super().destroy(request, *args, **kwargs)
+        raise exceptions.ValidationError({
+            'error': 'Cannot delete an open task, please close it first.'
+            })
+
     @action(detail=False, methods=['get'])
     def test(self, request):
-        return Response({'message': 'Hello, World!'})
+        return Response({'message': f'{socket.gethostname()}'})
 
     @action(detail=False, methods=['get'])
     def get_all_tasks(self, request):
