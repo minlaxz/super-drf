@@ -5,6 +5,7 @@ from django_fsm import FSMField, transition
 STATES = ('Open', 'In Progress', 'Resolved', 'Re Opened', 'Closed')
 STATES = list(zip(STATES, STATES))
 
+
 class TodoTask(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
@@ -18,11 +19,11 @@ class TodoTask(models.Model):
     @transition(field=state, source=['Open', 'Re Opened'], target='In Progress')
     def trans_start(self):
         pass
-    
+
     @transition(field=state, source=['In Progress', 'Re Opened'], target='Resolved')
     def trans_resolve(self):
         pass
-    
+
     @transition(field=state, source='Resolved', target='Re Opened')
     def trans_reopen(self):
         pass

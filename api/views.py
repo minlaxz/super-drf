@@ -7,7 +7,9 @@ from django_fsm import can_proceed
 from .models import TodoTask
 from .serializers import TodoTaskSerializer
 import socket
+
 # Create your views here.
+
 
 class ApiIndexViewSet(ModelViewSet):
     queryset = TodoTask.objects.all()
@@ -15,30 +17,30 @@ class ApiIndexViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = TodoTask.objects.all()
-        state = self.request.query_params.get('state', None)
+        state = self.request.query_params.get("state", None)
         if state is not None:
             queryset = queryset.filter(state=state)
         return queryset
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-        if instance.state == 'Closed':
+        if instance.state == "Closed":
             return super().destroy(request, *args, **kwargs)
-        raise exceptions.ValidationError({
-            'error': 'Cannot delete an open task, please close it first.'
-            })
+        raise exceptions.ValidationError(
+            {"error": "Cannot delete an open task, please close it first."}
+        )
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=["get"])
     def test(self, request):
-        return Response({'message': f'{socket.gethostname()}'})
+        return Response({"message": f"{socket.gethostname()}"})
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=["get"])
     def get_all_tasks(self, request):
         tasks = TodoTask.objects.all()
-        serializer = TodoTaskSerializer(tasks, many=True, context={'request': request})
+        serializer = TodoTaskSerializer(tasks, many=True, context={"request": request})
         return Response(serializer.data)
 
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=["post"])
     def create_task(self, request):
         serializer = TodoTaskSerializer(data=request.data)
         if serializer.is_valid():
@@ -46,38 +48,38 @@ class ApiIndexViewSet(ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def start_task(self, request, pk):
         task = self.get_object()
         if not can_proceed(task.trans_start):
-            raise exceptions.ValidationError('Transition is not allowed')
+            raise exceptions.ValidationError("Transition is not allowed")
         task.trans_start()
         task.save()
         return Response(status=status.HTTP_200_OK)
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def resolve_task(self, request, pk):
         task = self.get_object()
         if not can_proceed(task.trans_resolve):
-            raise exceptions.ValidationError('Transition is not allowed')
+            raise exceptions.ValidationError("Transition is not allowed")
         task.trans_resolve()
         task.save()
         return Response(status=status.HTTP_200_OK)
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def close_task(self, request, pk):
         task = self.get_object()
         if not can_proceed(task.trans_close):
-            raise exceptions.ValidationError('Transition is not allowed')
+            raise exceptions.ValidationError("Transition is not allowed")
         task.trans_close()
         task.save()
         return Response(status=status.HTTP_200_OK)
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def reopen_task(self, request, pk):
         task = self.get_object()
         if not can_proceed(task.trans_reopen):
-            raise exceptions.ValidationError('Transition is not allowed')
+            raise exceptions.ValidationError("Transition is not allowed")
         task.trans_reopen()
         task.save()
         return Response(status=status.HTTP_200_OK)
