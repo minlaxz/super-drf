@@ -23,7 +23,7 @@ from upload.views import image_upload
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('upload/', image_upload, name="upload"),
-    path('', include('django_prometheus.urls')),
+    # path('', include('django_prometheus.urls')),
     path('api/', include('api.urls')),
 ]
 
