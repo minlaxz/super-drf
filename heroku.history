@@ -1,4 +1,4 @@
-docker build -t registry.heroku.com/superduperdrf/web -f Dockerfile.heroku .
+docker build -t registry.heroku.com/superduperdrf/web -f Dockerfile .
 docker push registry.heroku.com/superduperdrf/web:latest
 heroku container:release -a superduperdrf web
 heroku logs --tail -a superduperdrf
