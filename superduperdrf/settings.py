@@ -20,12 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 try:
     IS_CONTAINER = int(os.environ.get('IS_CONTAINER', 0))
 except ValueError:
-    IS_CONTAINER = 0
+    IS_CONTAINER = False
 
 try:
-    IS_HEROKU = int(os.environ.get("IS_HEROKU", 0))
+    IS_SAAS = int(os.environ.get("IS_SAAS", 0))
 except ValueError:
-    IS_HEROKU = False
+    IS_SAAS = False
 
 
 # Quick-start development settings - unsuitable for production
@@ -35,10 +35,10 @@ except ValueError:
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-$b)zc9%&djhxe_$12$^5*ykiss&3#*r*a447cmfc%p=8va5uza")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.environ.get('DEBUG', default=0))
+DEBUG = int(os.environ.get('DEBUG', default=1))
 
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1, localhost").split(",")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(",")
 
 
 # Application definition
@@ -120,9 +120,11 @@ DATABASES = {
     }
 }
 
-if IS_HEROKU:
+# Deploying to fly.io
+IS_SAAS = True
+if IS_SAAS:
     DATABASE_URL = os.environ.get('DATABASE_URL')
-    db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
+    db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=False)
     DATABASES['default'].update(db_from_env)
 
 # Password validation
