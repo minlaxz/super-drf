@@ -1,9 +1,7 @@
 ARG PYTHON_VERSION=3.9
-ARG DJANGO_SUPERUSER_USERNAME
-ARG DJANGO_SUPERUSER_PASSWORD
-ARG DJANGO_SUPERUSER_EMAIL
 FROM python:${PYTHON_VERSION}
 
+RUN env
 RUN apt-get update -q && apt-get install -yqq \
     python3-pip \
     python3-venv \
