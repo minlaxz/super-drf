@@ -1,7 +1,6 @@
 ARG PYTHON_VERSION=3.9
 FROM python:${PYTHON_VERSION}
 
-RUN env
 RUN apt-get update -q && apt-get install -yqq \
     python3-pip \
     python3-venv \
