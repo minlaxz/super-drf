@@ -31,8 +31,6 @@ RUN pip install -r requirements.txt
 # copy project
 COPY . .
 RUN python manage.py collectstatic --noinput --clear
-RUN python manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_superuser('testuser', 'admin@example.com', 'testpass')"
-
 
 EXPOSE 8080
 RUN chown -R app:app ${APP_HOME}
@@ -41,4 +39,7 @@ USER app
 # run cmd
 # CMD ["gunicorn", "--bind", "unix:/tmp/gunicorn.sock", "--workers", "2", "--log-level", "info", "--log-file", "/home/app/web/logs/gunicorn.log", "--error-logfile", "/home/app/web/logs/gunicorn.error.log", "--access-logfile", "/home/app/web/logs/gunicorn.access.log", "--timeout", "300", "--graceful-timeout", "300", "--reload", "app.wsgi:application"]
 # CMD ["gunicorn", "--bind", ":8080", "--workers", "2", "--log-level", "info", "--log-file", "/home/app/web/logs/gunicorn.log", "--error-logfile", "/home/app/web/logs/gunicorn.error.log", "--access-logfile", "/home/app/web/logs/gunicorn.access.log", "--timeout", "3000", "--graceful-timeout", "3000", "--reload", "superduperdrf.wsgi:application"]
-CMD ["gunicorn", "--bind", ":8080", "--workers", "2", "superduperdrf.wsgi:application"]
+
+# See in entrypoint comment.
+# CMD ["gunicorn", "--bind", ":8080", "--workers", "2", "superduperdrf.wsgi:application"]
+ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
