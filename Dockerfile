@@ -31,7 +31,8 @@ RUN pip install -r requirements.txt
 # copy project
 COPY . .
 RUN python manage.py collectstatic --noinput --clear
-RUN python manage.py createsuperuser --noinput
+# OK You can see me, but I don't care!
+RUN python manage.py createsuperuser --noinput --username testuser --password testpass --email admin@example.com
 
 EXPOSE 8080
 RUN chown -R app:app ${APP_HOME}
