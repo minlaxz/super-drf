@@ -50,16 +50,37 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'oauth2_provider',
     'corsheaders',
     'rest_framework',
     'django_fsm',
-    # 'django_prometheus',
+    'django_prometheus',
+    'rest_framework_simplejwt',
+
     'api.apps.ApiConfig',
     'upload.apps.UploadConfig',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
+
+OAUTH2_PROVIDER = {
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
+}
+# H2J3bHlJNH4MlXAYviLWW4hquotHGFB3IWOxz7kl
+# YsN2Km9opyWmVZAdvguANc3YYsUkoHhtrdtmLvzTSFzRTxIh3eL33M3YQ6u39ZDXcFDebW6uesnBFqfp5xTze8SoUM5B8bONI1zTv36SW6GlRdWRtpBUNSvHIYf0E80F
+
+
 MIDDLEWARE = [
-    # 'django_prometheus.middleware.PrometheusBeforeMiddleware',
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -69,7 +90,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'django_prometheus.middleware.PrometheusAfterMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 CORS_ALLOWED_ORIGINS = [
