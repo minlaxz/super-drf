@@ -28,8 +28,14 @@ RUN chmod 777 -R $APP_HOME/logs
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
+# copy entrypoint.prod.sh
+# need to comment out if not using entrypoint
+COPY ./entrypoint.prod.sh .
+RUN sed -i 's/\r$//g'  $APP_HOME/entrypoint.prod.sh
+RUN chmod +x  $APP_HOME/entrypoint.prod.sh
+
 # copy project
-COPY . .
+COPY . $APP_HOME
 RUN python manage.py collectstatic --noinput --clear
 
 EXPOSE 8080
