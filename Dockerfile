@@ -30,9 +30,9 @@ RUN pip install -r requirements.txt
 
 # copy entrypoint.prod.sh
 # need to comment out if not using entrypoint
-COPY ./entrypoint.prod.sh .
-RUN sed -i 's/\r$//g'  $APP_HOME/entrypoint.prod.sh
-RUN chmod +x  $APP_HOME/entrypoint.prod.sh
+# COPY ./entrypoint.prod.sh .
+# RUN sed -i 's/\r$//g'  $APP_HOME/entrypoint.prod.sh
+# RUN chmod +x  $APP_HOME/entrypoint.prod.sh
 
 # copy project
 COPY . $APP_HOME
@@ -47,5 +47,5 @@ USER app
 # CMD ["gunicorn", "--bind", ":8080", "--workers", "2", "--log-level", "info", "--log-file", "/home/app/web/logs/gunicorn.log", "--error-logfile", "/home/app/web/logs/gunicorn.error.log", "--access-logfile", "/home/app/web/logs/gunicorn.access.log", "--timeout", "3000", "--graceful-timeout", "3000", "--reload", "superduperdrf.wsgi:application"]
 
 # See in entrypoint comment.
-# CMD ["gunicorn", "--bind", ":8080", "--workers", "2", "superduperdrf.wsgi:application"]
-ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
+CMD ["gunicorn", "--bind", ":8080", "--workers", "2", "superduperdrf.wsgi:application"]
+# ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
