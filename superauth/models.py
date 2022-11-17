@@ -37,8 +37,8 @@ class CustomUserModelManager(BaseUserManager):
 
 class CustomUserModel(AbstractUser, PermissionsMixin):
   username = None
-  user_id    = models.UUIDField(max_length = 32, default = uuid4, primary_key = True, editable = False)
-  email     = models.EmailField(max_length = 100, unique = True, null = False, blank = False)
+  user_id = models.UUIDField(max_length = 32, default = uuid4, primary_key = True, editable = False)
+  email = models.EmailField(max_length = 100, unique = True, null = False, blank = False)
 
   USERNAME_FIELD = "email"
   REQUIRED_FIELDS = []
