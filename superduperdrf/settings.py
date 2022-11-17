@@ -162,8 +162,8 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True, 
     'UPDATE_LAST_LOGIN': True,
-    "USER_ID_FIELD": "user_id",  # for the custom user model
-    "USER_ID_CLAIM": "user_id",
+    # "USER_ID_FIELD": "user_id",  # for the custom user model
+    # "USER_ID_CLAIM": "user_id",
     "SIGNING_KEY": SECRET_KEY
 }
 
