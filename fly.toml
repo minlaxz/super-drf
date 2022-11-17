@@ -1,4 +1,4 @@
-# fly.toml file generated for super-duper-laxz-69 on 2022-09-25T18:45:04+06:30
+# fly.toml file generated for super-duper-laxz-69 on 2022-11-17T19:35:37+06:30
 
 app = "super-duper-laxz-69"
 kill_signal = "SIGINT"
@@ -6,7 +6,7 @@ kill_timeout = 5
 processes = []
 
 [deploy]
-  release_command = "python manage.py migrate"
+  release_command = "sh fly.release.sh"
 
 [env]
   PORT = "8080"
