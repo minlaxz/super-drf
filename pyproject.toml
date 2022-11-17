@@ -7,7 +7,6 @@ license = "UNLICENSE"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-djangorestframework = "^3.13.1"
 Django = "^4.0.4"
 django-fsm = "^2.8.0"
 graphviz = "^0.20"
@@ -16,10 +15,13 @@ psycopg2-binary = "^2.9.3"
 gunicorn = "^20.1.0"
 whitenoise = "^6.2.0"
 dj-database-url = "^0.5.0"
-djangorestframework-simplejwt = "^5.2.2"
 django-prometheus = "^2.2.0"
 django-debug-toolbar = "^3.7.0"
-django-oauth-toolkit = "^2.2.0"
+django-rest-knox = "^4.2.0"
+djangorestframework = "^3.14.0"
+dj-rest-auth = "^2.2.5"
+django-allauth = "^0.51.0"
+djangorestframework-simplejwt = "^5.2.2"
 
 [tool.poetry.dev-dependencies]
 

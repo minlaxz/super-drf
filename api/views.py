@@ -33,7 +33,13 @@ class ApiIndexViewSet(ModelViewSet):
 
     @action(detail=False, methods=["get"], permission_classes=[AllowAny])
     def test(self, request):
-        return Response({"message": f"{socket.gethostname()}"})
+
+        return Response(
+            {
+              "message": f"{socket.gethostname()}",
+              "isAnonymous": request.user.is_anonymous
+            }
+        )
 
     @action(detail=False, methods=["get"])
     def get_all_tasks(self, request):

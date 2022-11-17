@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+from datetime import timedelta
+from rest_framework.settings import api_settings
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,31 +53,90 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     
-    'oauth2_provider',
+    # third party
     'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
     'django_fsm',
     'django_prometheus',
-    'rest_framework_simplejwt',
+
+    # authentication
+    'knox',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 
     'api.apps.ApiConfig',
     'upload.apps.UploadConfig',
+    'superauth.apps.SuperauthConfig',
 ]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
+# All Auth
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# we are turning off email verification for now
+SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
+SOCIALACCOUNT_EMAIL_REQUIRED = False
+
+SITE_ID = 1  # https://dj-rest-auth.readthedocs.io/en/latest/installation.html#registration-optional
+REST_USE_JWT = True # use JSON Web Tokens
+# JWT_AUTH_COOKIE = "nextjsdrf-access-token"
+# JWT_AUTH_REFRESH_COOKIE = "nextjsdrf-refresh-token"
+# JWT_AUTH_SAMESITE = "none"
+
+# custom user model, because we do not want to use the Django provided user model
+AUTH_USER_MODEL = "superauth.CustomUserModel"
+
+# We need to specify the exact serializer as well for dj-rest-auth, otherwise it will end up shooting itself
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'superauth.serializers.CustomUserModelSerializer'
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        "knox.auth.TokenAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "dj_rest_auth.utils.JWTCookieAuthentication",
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ),
+    'DATETIME_FORMAT': "iso-8601",
 }
 
-OAUTH2_PROVIDER = {
-    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
+REST_KNOX = {
+  'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
+  'AUTH_TOKEN_CHARACTER_LENGTH': 64,
+  'TOKEN_TTL': timedelta(hours=10),
+  'USER_SERIALIZER': 'knox.serializers.UserSerializer',
+  'TOKEN_LIMIT_PER_USER': None,
+  'AUTO_REFRESH': False,
+  'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
 }
+
+# OAUTH2_PROVIDER = {
+#     'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
+# }
 # H2J3bHlJNH4MlXAYviLWW4hquotHGFB3IWOxz7kl
 # YsN2Km9opyWmVZAdvguANc3YYsUkoHhtrdtmLvzTSFzRTxIh3eL33M3YQ6u39ZDXcFDebW6uesnBFqfp5xTze8SoUM5B8bONI1zTv36SW6GlRdWRtpBUNSvHIYf0E80F
 
@@ -90,15 +152,29 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'superduperdrf.middlewares.RequestResponseMiddleware',
     'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=3),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True, 
+    'UPDATE_LAST_LOGIN': True,
+    "USER_ID_FIELD": "user_id",  # for the custom user model
+    "USER_ID_CLAIM": "user_id",
+    "SIGNING_KEY": SECRET_KEY
+}
+
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'http://127.0.0.1:3000',
     'https://minlaxz.me',
     'https://minlaxz.vercel.app',
     'https://minlaxz.github.io',
 ]
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'superduperdrf.urls'
 

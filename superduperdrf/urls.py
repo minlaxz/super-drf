@@ -19,11 +19,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from upload.views import image_upload
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-    TokenVerifyView
-)
+# from rest_framework_simplejwt.views import (
+#     TokenObtainPairView,
+#     TokenRefreshView,
+#     TokenVerifyView
+# )
 
 
 urlpatterns = [
@@ -31,10 +31,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('upload/', image_upload, name="upload"),
     path('api/', include('api.urls')),
-    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
-    path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('auth/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path("rest/auth/", include("dj_rest_auth.urls")),  # endpoints provided by dj-rest-auth
+    path("superauth/social/login/", include("superauth.urls")),  # our own views
+    # path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    # path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # path('auth/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]
 
 if bool(settings.DEBUG):
