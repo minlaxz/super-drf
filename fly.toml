@@ -1,4 +1,4 @@
-# fly.toml file generated for super-duper-laxz-69 on 2022-11-17T19:35:37+06:30
+# fly.toml file generated for super-duper-laxz-69 on 2022-11-17T22:06:36+06:30
 
 app = "super-duper-laxz-69"
 kill_signal = "SIGINT"
