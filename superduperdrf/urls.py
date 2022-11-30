@@ -31,7 +31,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('upload/', image_upload, name="upload"),
     path('api/', include('api.urls')),
-    path("rest/auth/", include("dj_rest_auth.urls")),  # endpoints provided by dj-rest-auth
+    path("rest-auth/", include("dj_rest_auth.urls")),  # endpoints provided by dj-rest-auth
+    path("rest-auth/registration/", include('dj_rest_auth.registration.urls')),
     path("superauth/social/login/", include("superauth.urls")),  # our own views
     # path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     # path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
