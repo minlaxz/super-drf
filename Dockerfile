@@ -47,5 +47,6 @@ USER app
 # CMD ["gunicorn", "--bind", ":8080", "--workers", "2", "--log-level", "info", "--log-file", "/home/app/web/logs/gunicorn.log", "--error-logfile", "/home/app/web/logs/gunicorn.error.log", "--access-logfile", "/home/app/web/logs/gunicorn.access.log", "--timeout", "3000", "--graceful-timeout", "3000", "--reload", "superduperdrf.wsgi:application"]
 
 # See in entrypoint comment.
-CMD ["uvicorn", "--bind", ":8080", "--workers", "2", "superduperdrf.asgi:application"]
+# CMD ["uvicorn", "--bind", ":8080", "--workers", "2", "superduperdrf.asgi:application"]
+CMD ["daphne", "-p", "8080", "superduperdrf.asgi:application"]
 # ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
