@@ -48,5 +48,5 @@ USER app
 
 # See in entrypoint comment.
 # CMD ["uvicorn", "--bind", ":8080", "--workers", "2", "superduperdrf.asgi:application"]
-CMD ["daphne", "-p", "8080", "superduperdrf.asgi:application"]
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8080", "superduperdrf.asgi:application"]
 # ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
