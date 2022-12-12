@@ -15,6 +15,7 @@ import os
 import dj_database_url
 from datetime import timedelta
 from rest_framework.settings import api_settings
+from django.core.asgi import get_asgi_application
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -62,6 +63,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "django_fsm",
     "django_prometheus",
+    "channels",
     # authentication
     "knox",
     "allauth",
@@ -70,9 +72,11 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "dj_rest_auth",
     "dj_rest_auth.registration",
+    # super apps
     "api.apps.ApiConfig",
     "upload.apps.UploadConfig",
     "superauth.apps.SuperauthConfig",
+    "supervalve.apps.SupervalveConfig",
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -112,12 +116,12 @@ REST_AUTH_SERIALIZERS = {
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "knox.auth.TokenAuthentication",
-        "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-        "dj_rest_auth.utils.JWTCookieAuthentication",
+        # "knox.auth.TokenAuthentication",
+        # "rest_framework.authentication.BasicAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
+        # "dj_rest_auth.utils.JWTCookieAuthentication",
     ),
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    # "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DATETIME_FORMAT": "iso-8601",
 }
 
@@ -130,6 +134,8 @@ REST_KNOX = {
     "AUTO_REFRESH": False,
     "EXPIRY_DATETIME_FORMAT": api_settings.DATETIME_FORMAT,
 }
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # OAUTH2_PROVIDER = {
 #     'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
@@ -291,3 +297,25 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "mediafiles"
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# ASGI
+ASGI_APPLICATION = "superduperdrf.asgi.application"
+
+# Redis
+REDIS_ENDPOINT_WITH_PORT = os.environ.get("REDIS_ENDPOINT_WITH_PORT")
+REDIS_USER = os.environ.get("REDIS_USER")
+REDIS_PASSWORD = os.environ.get("REDIS_PASSWORD")
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            # "hosts": [("localhost", 6379)],
+            "hosts": [
+                (f"redis://{REDIS_USER}:{REDIS_PASSWORD}@{REDIS_ENDPOINT_WITH_PORT}")
+            ],
+        },
+    },
+}
+
+# CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
